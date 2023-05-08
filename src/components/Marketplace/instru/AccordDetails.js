@@ -1,24 +1,41 @@
-import React from "react";
+import React ,{useEffect , useState} from "react";
 import { useParams } from "react-router-dom";
 import "../instrument.css";
-import { accords } from "../../../dummydata";
 import Detailsback from "../background/backdetails";
+import axios from "axios";
 
 const AccordDetails = () => {
-  const { id } = useParams(); // Récupération de l'ID de l'instrument à partir de l'URL
-  const accord = accords.find((accord) => accord.id === id); // Récupération de l'instrument correspondant à l'ID
+  const { _id } = useParams(); // Récupération de l'ID de l'instrument à partir de l'URL
+  const [accord, setaccords] = useState([]); // État pour stocker les détails de l'instrument
+
+  useEffect(() => {
+    // Fonction pour récupérer les détails de l'instrument depuis le backend
+    const fetchInstrumentDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/v1/products/${_id}`);
+        setaccords(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchInstrumentDetails(); // Appel de la fonction pour récupérer les détails de l'instrument
+  }, [_id]);
 
   return (
     <>
     <Detailsback/>
-    <div className="instru-details-container">
+    {accord && (
+       <div className="instru-details-container">
       <img className="instru-details-img" src={accord.cover} alt={accord.name} />
       <div className="instru-details-content">
-        <h1 className="instru-details-name">{accord.name}</h1>
+        <h1 className="instru-details-name">{accord.title}</h1>
         <p className="instru-details-price"><b>Prix: </b>${accord.price}.00</p>
+        <p className="instru-details-price"><b>Quantité: </b>{accord.quantity}</p>     
         <p className="instru-details-description"><b>Description: </b>{accord.description}</p>
       </div>
     </div>
+    )}
     </>
   );
 };

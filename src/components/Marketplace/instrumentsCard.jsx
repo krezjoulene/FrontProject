@@ -1,41 +1,30 @@
-import React ,{ useState }from "react"
-import { instruments } from "../../dummydata"
+import React ,{ useState , useEffect }from "react"
 import "./instrument.css"
 import { Link } from "react-router-dom";
-import { accords, guitar, piano, tambours, violoncelle, violons } from "../../dummydata";
+import axios from "axios";
 
 const InstruCard = ({ addToCart }) => {
-  const getInstrumentArray = () => {
-    switch (instrumentType) {
-        case "guitare":
-            return guitar;
-        case "piano":
-            return piano;
-        case "accordéon":
-            return accords;
-        case "violon":
-            return violons;
-        case "violoncelle":
-            return violoncelle;
-        case "tambours":
-            return tambours;
-        default:
-            return instruments;
-    }
-};
-const [instrumentType] = useState("");
-
+const [product , setproduct] = useState([]);
+  const fetchAxios = async () =>{
+    const res = await axios.get("http://localhost:8000/api/v1/products")
+    //console.log(res.data)
+    setproduct(res.data.data)
+  }
+  console.log(product)
+  useEffect(()=>{
+      fetchAxios();
+  },[])
   return (
     <>
-      {getInstrumentArray().map((val) => (
+      {product?.map((val) => (
         <div className='items shadow'>
-           <Link to={`/instrument/${val.id}`} onClick={() => window.scrollTo(0, 0)}>
+          <Link to={`/instrument/${val._id}`} onClick={() => window.scrollTo(0, 0)}>
           <div className='img'>
             <img src={val.cover} alt='' />
           </div>
           <div className='details'>
-            <h2>{val.name}</h2>
-            <p>{val.work}</p>
+            <h2>{val.title}</h2>
+            
             
           </div>
           </Link>

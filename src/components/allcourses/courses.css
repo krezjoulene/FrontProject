@@ -115,6 +115,43 @@
 .online .box:hover h1 {
   color: #fff;
 }
+/********** bouton + ********/
+.container {
+  position: relative;
+}
+
+
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f9f9f9;
+    width: max-content;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    z-index: 1;
+    margin-left: -120px;
+    padding: 10px;
+  }
+  
+
+
+.dropdown ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown li {
+  margin-bottom: 10px;
+}
+
+.dropdown a {
+  color: #0a0a0a;
+  font-size: 16px;
+  text-decoration: none;
+  
+}
 
 /*-------------online---------*/
 @media screen and (max-width: 768px) {

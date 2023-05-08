@@ -1,71 +1,75 @@
 import React, { useState } from "react";
-import { accords, guitar, instruments, piano, tambours, violoncelle, violons } from "../../../dummydata";
 import Detailsback from "../background/backdetails";
+import axios from "axios";
 import "./Home.css"
 
 function AddInstrument() {
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
+    const [qte,setqte]=useState("");
+    const [phone,setphone]=useState("");
     const [description, setDescription] = useState("");
     const [setImage] = useState(null);
     const [instrumentType, setInstrumentType] = useState("");
     const [instrumentEtat, setInstrumentEtat] = useState("");
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const fileInput = document.getElementById("image");
-        const file = fileInput.files[0];
-        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
 
-        if (!allowedExtensions.exec(file.name)) {
-            alert("Veuillez sélectionner une image valide (jpg, jpeg, png ou gif).");
-            fileInput.value = "";
-            return false;
-        }
 
-        const reader = new FileReader();
-        reader.onload = function () {
-
-            let instrumentArray;
-
-            if (instrumentType === "guitare") {
-                instrumentArray = guitar;
-            } else if (instrumentType === "piano") {
-                instrumentArray = piano;
-            } else if (instrumentType === "accordéon") {
-                instrumentArray = accords;
-            } else if (instrumentType === "violon") {
-                instrumentArray = violons;
-            } else if (instrumentType === "violoncelle") {
-                instrumentArray = violoncelle;
-            } else if (instrumentType === "tambours") {
-                instrumentArray = tambours;
-            } else {
-                instrumentArray = instruments;
+    const handelchangName=(e)=>{
+        setName(e.target.value);
+        console.log(e.target.value)
+     }
+     const handelchangPrice=(e)=>{
+         setPrice(e.target.value);
+         console.log(e.target.value)
+      }
+      const handelchangQuantity=(e)=>{
+        setqte(e.target.value);
+        console.log(e.target.value)
+     }
+      const handelchangeDescrip=(e)=>{
+         setDescription(e.target.value);
+         console.log(e.target.value)
+      }
+      const handelchangetype=(e)=>{
+         setInstrumentType(e.target.value);
+         console.log(e.target.value)
+      }
+      const handelchangeetat=(e)=>{
+         setInstrumentEtat(e.target.value);
+         console.log(e.target.value)
+      }
+      const handelchangephone=(e)=>{
+        setphone(e.target.value);
+        console.log(e.target.value)
+     }     
+      const AjoutInstru=async(e)=>{
+         e.preventDefault();
+         try {
+            const res=await axios.post("http://localhost:8000/api/v1/products",{
+             title: name,
+             price: price,
+             quantity: qte,
+             phone : phone,
+             description: description,
+             Category: instrumentType,
+             etat: instrumentEtat,
+             
+            }) 
+            if(res.status===201){
+              console.log("instrument : ",res.data.data);
+             alert("Instrument ajouté avec succès !");
+             window.location.href = "/marketplace";
             }
+         } catch (error) {
+             console.log(error)
+             alert("Erreur lors de l'ajout de l'instrument. Veuillez réessayer.");
+         }
+      }
+    
 
-            const newInstrument = {
-                id: (instrumentArray.length + 1).toString(),
-                cover: reader.result,
-                name: name,
-                price: price,
-                Etat :instrumentEtat ,
-                description: description,
-            };
-
-            instrumentArray.push(newInstrument);
-            setName("");
-            setPrice("");
-            setDescription("");
-            setInstrumentEtat("");
-        };
-
-        reader.readAsDataURL(file);
-        alert("Instrument ajouté avec succès !");
-    };
-
-    const handleImageChange = (event) => {
-        setImage(event.target.files[0]);
+  const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
     };
 
 
@@ -75,14 +79,14 @@ function AddInstrument() {
             <Detailsback />
             <div className="add-instrument-form">
                 <h2>Ajouter un nouvel instrument</h2>
-                <form onSubmit={handleSubmit}>
+                <form >
                     <div className="form-group">
                         <label htmlFor="name"><b>Nom</b></label>
                         <input
                             type="text"
                             id="name"
                             value={name}
-                            onChange={(event) => setName(event.target.value)}
+                            onChange={handelchangName}
                         />
                     </div>
                     <div className="form-group">
@@ -91,12 +95,30 @@ function AddInstrument() {
                             type="number"
                             id="price"
                             value={price}
-                            onChange={(event) => setPrice(event.target.value)}
+                            onChange={handelchangPrice}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="quantity"><b>Quantité</b></label>
+                        <input
+                            type="number"
+                            id="quantity"
+                            value={qte}
+                            onChange={handelchangQuantity}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="phone"><b>Entrez votre Numéro pour que l'acheteur puisse vous contacter</b></label>
+                        <input
+                            type="number"
+                            id="phone"
+                            value={phone}
+                            onChange={handelchangephone}
                         />
                     </div>
                     <div className="form-group">
                         <label htmlFor="type"><b>Type d'instrument</b></label>
-                        <select id="instrumentType" value={instrumentType} onChange={(event) => setInstrumentType(event.target.value)}>
+                        <select id="instrumentType" value={instrumentType} onChange={handelchangetype}>
                             <option value="guitare">Guitare</option>
                             <option value="piano">Piano</option>
                             <option value="accordéon">Accordéon</option>
@@ -112,7 +134,7 @@ function AddInstrument() {
                     </div>
                     <div className="form-group">
                         <label htmlFor="Etat"><b>Etat d'instrument</b></label>
-                        <select id="instrumentEtat" value={instrumentEtat} onChange={(event) => setInstrumentEtat(event.target.value)}>
+                        <select id="instrumentEtat" value={instrumentEtat} onChange={handelchangeetat}>
                             <option value="neuf">Nouveau</option>
                             <option value="occasion">Occasion</option>
                         </select>
@@ -122,14 +144,14 @@ function AddInstrument() {
                         <textarea
                             id="description"
                             value={description}
-                            onChange={(event) => setDescription(event.target.value)}
+                            onChange={handelchangeDescrip}
                         ></textarea>
                     </div>
                     <div className="form-group">
                         <label htmlFor="image"><b>Image</b></label>
                         <input type="file" id="image" onChange={handleImageChange} />
                     </div>
-                    <button type="submit"><b>Ajouter l'annonce</b></button>
+                    <button onClick={AjoutInstru}><b>Ajouter l'annonce</b></button>
                 </form>
             </div>
           

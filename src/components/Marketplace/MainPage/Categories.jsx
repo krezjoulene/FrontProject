@@ -1,80 +1,38 @@
-import React from "react"
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
 const Categories = () => {
-  const data = [
-    {
-      cateImg: "./images/category/cat1.png",
-      cateName: "Guitare",
-      link: "/guitars" 
-    },
-    {
-      cateImg: "./images/category/cat2.png",
-      cateName: "Piano",
-      link: "/pianos"
-    },
-    {
-      cateImg: "./images/category/cat3.png",
-      cateName: "Accordéon",
-      link: "/accordeon"
-    },
-    {
-      cateImg: "./images/category/cat5.png",
-      cateName: "Violon",
-      link: "/violon"
-    },
-    {
-      cateImg: "./images/category/cat4.png",
-      cateName: "Violoncelle",
-      link: "/violoncelle"
-    },
-    {
-      cateImg: "./images/category/cat6.png",
-      cateName: "Tambours",
-      link: "/tambours"
-    },
-    {
-      cateImg: "./images/category/cat7.png",
-      cateName: "Oud",
-      link: "/oud"
+  const [categories, setCategories] = useState([]);
 
-    },
-    {
-      cateImg: "./images/category/cat9.png",
-      cateName: "Saxophone",
-      link: "/saxophone"
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/v1/categories");
+        setCategories(response.data.data);
+        console.log("category ",response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-    },
-    {
-      cateImg: "./images/category/cat10.png",
-      cateName: "Trompette",
-      link: "/trompette"
-
-    },
-    {
-      cateImg: "./images/category/cat11.png",
-      cateName: "Darbouka",
-      link: "/Darbouka"
-
-    },
-  ]
+    fetchCategories();
+  }, []);
 
   return (
     <>
-      <div className='category'>
-        {data.map((value, index) => {
-          return (
-            // Ajouter un lien autour de chaque instrument
-            <Link to={value.link} key={index}>
-              <div className='box f_flex'>
-                <img src={value.cateImg} alt='' />
-                <span>{value.cateName}</span>
-              </div>
-            </Link>
-          );
-        })}
+      <div className="category">
+        {categories?.map((category,index) => (
+          <Link to={category._id} key={index}>
+            <div className="box f_flex">
+              <img src={category.image} alt="" />
+              <span>{category.categoryname}</span>
+            </div>
+          </Link>
+        ))}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Categories
+export default Categories;

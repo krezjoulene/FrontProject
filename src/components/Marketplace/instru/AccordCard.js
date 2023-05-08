@@ -1,16 +1,32 @@
-import React   from "react"
-import { Link } from "react-router-dom"
-import { accords } from "../../../dummydata"
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import "../instrument.css"
 
 const AccordCard = ({addToCart }) => {
+  const [products, setProducts] = useState([]);
 
+  useEffect(() => {
+    const fetchProductsByCategory = async () => {
+      try {
+        const categoryId = '644daad111bd2335dccc3927';
+        const response = await axios.get(`http://localhost:8000/api/v1/products?category=${categoryId}`);
+        const filteredProducts = response.data.data.filter(product => product.category === categoryId);
+        setProducts(filteredProducts);
+        console.log(filteredProducts);
+      } catch (error) {
+        console.log(error);
+      }
+    };    
+
+    fetchProductsByCategory();
+  }, []);
   
   return (
     <>
-      {accords.map((val) => (
+      {products?.map((val) => (
         <div className='items shadow'>
-        <Link to={`/accord/${val.id}`} onClick={() => window.scrollTo(0, 0)}>
+        <Link to={`/644daad111bd2335dccc3927/${val._id}`} onClick={() => window.scrollTo(0, 0)}>
           <div className='img'>
             <img src={val.cover} alt='' />
             <div className='overlay'>
@@ -19,7 +35,7 @@ const AccordCard = ({addToCart }) => {
             </div>
           </div>
           <div className='details'>
-            <h2>{val.name}</h2>
+            <h2>{val.title}</h2>
             <p>{val.work}</p>
           </div>
           </Link>

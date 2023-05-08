@@ -1,24 +1,41 @@
-import React from "react";
+import React ,{useEffect , useState} from "react";
 import { useParams } from "react-router-dom";
 import "../instrument.css";
 import Detailsback from "../background/backdetails";
-import { piano } from "../../../dummydata";
+import axios from "axios";
 
 const PianoDetails = () => {
-  const { id } = useParams(); // Récupération de l'ID de l'instrument à partir de l'URL
-  const pianos = piano.find((pianos) => pianos.id === id); // Récupération de l'instrument correspondant à l'ID
+  const { _id } = useParams(); // Récupération de l'ID de l'instrument à partir de l'URL
+  const [pianos, setguitars] = useState([]); // État pour stocker les détails de l'instrument
+
+  useEffect(() => {
+    // Fonction pour récupérer les détails de l'instrument depuis le backend
+    const fetchInstrumentDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/v1/products/${_id}`);
+        setguitars(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchInstrumentDetails(); // Appel de la fonction pour récupérer les détails de l'instrument
+  }, [_id]);
 
   return (
     <>
     <Detailsback/>
-    <div className="instru-details-container">
+   {pianos &&(
+     <div className="instru-details-container">
       <img className="instru-details-img" src={pianos.cover} alt={pianos.name} />
       <div className="instru-details-content">
-        <h1 className="instru-details-name">{pianos.name}</h1>
+        <h1 className="instru-details-name">{pianos.title}</h1>
         <p className="instru-details-price"><b>Prix: </b>${pianos.price}.00</p>
+        <p className="instru-details-price"><b>Quantité: </b>{pianos.quantity}</p>
         <p className="instru-details-description"><b>Description: </b>{pianos.description}</p>
       </div>
     </div>
+    )}
     </>
   );
 };

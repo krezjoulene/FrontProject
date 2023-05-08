@@ -32,6 +32,10 @@ import SaxoDetails from "./components/Marketplace/instru/saxoDetails"
 import TrompetteDetails from "./components/Marketplace/instru/trompetteDetails"
 import DarboukaDetails from "./components/Marketplace/instru/darboukaDetails"
 import AddInstrument from "./components/Marketplace/MainPage/Annonceform"
+import Profile from "./components/Profiles/Profile"
+import AddPlaylist from "./components/allcourses/AddPlaylist"
+import AddMeeting from "./components/allcourses/AddLink"
+import AllCorses from "./components/allcourses/Allcourses"
 
 
 function App() {
@@ -76,7 +80,10 @@ function App() {
           <Route exact path='/' component={Home} />
           <Route exact path='/about' component={About} />
           <Route exact path='/courses' component={CourseHome} />
+          <Route exact path='/profile' component={Profile} />
           <Route exact path='/form' component={AddInstrument} />
+          <Route exact path='/ajouterInstrument' component={AddPlaylist} />
+          <Route exact path='/ajouterLien' component={AddMeeting} />
           <Route exact path='/marketplace' >
             <Instruments CartItem={CartItem} addToCart={addToCart} />
           </Route>
@@ -85,13 +92,13 @@ function App() {
           <Route path='/cart' exact>
             <Cart CartItem={CartItem} addToCart={addToCart} decreaseQty={decreaseQty} removeCartItem={removeCartItem}/>
           </Route>
-          <Route exact path='/guitars' >
+          <Route exact path='/644c0611066ad4fe13963714' >
             <Guitars CartItem={CartItem} addToCart={addToCart} />
           </Route>
-          <Route exact path='/pianos' >
+          <Route exact path='/644c0ae86fd044576c704483' >
             <Pianos CartItem={CartItem} addToCart={addToCart} />
           </Route>
-          <Route exact path='/accordeon' >
+          <Route exact path='/644daad111bd2335dccc3927' >
             <Accords CartItem={CartItem} addToCart={addToCart} />
           </Route>
           <Route exact path='/violon' >
@@ -115,10 +122,11 @@ function App() {
           <Route exact path='/darbouka' >
             <Darbouka CartItem={CartItem} addToCart={addToCart} />
           </Route>
-          <Route path="/instrument/:id" component={InstrumentDetails} />
-          <Route path="/guitars/:id" component={GuitarDetails} />
-          <Route path="/pianos/:id" component={PianoDetails} />
-          <Route path="/accord/:id" component={AccordDetails} />
+          <Route path="/playlist/:_id" component={AllCorses}/>
+          <Route path="/instrument/:_id" render={(props) => <InstrumentDetails {...props} />} />
+          <Route path="/644c0611066ad4fe13963714/:_id" component={GuitarDetails} />
+          <Route path="/644c0ae86fd044576c704483/:_id" component={PianoDetails} />
+          <Route path="/644daad111bd2335dccc3927/:_id" component={AccordDetails} />
           <Route path="/violon/:id" component={Violondetails} />
           <Route path="/violoncelle/:id" component={VioloncelleDetails} />
           <Route path="/tambours/:id" component={TambourDetails} />

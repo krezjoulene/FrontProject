@@ -1,10 +1,33 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./header.css";
 
 const Header = () => {
   const [click, setClick] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState("");
 
+  const handleLogout = () => {
+    // Effectuer les actions de déconnexion, réinitialiser l'état
+    setIsLoggedIn(false);
+    setUserRole("");
+    localStorage.removeItem("token");
+  localStorage.removeItem("UserRole");
+  };
+
+  useEffect(() => {
+    // Vérifier si un jeton d'authentification est présent dans le stockage local
+    const token = localStorage.getItem("token");
+    const userRole = localStorage.getItem("UserRole");
+
+    if (token && userRole) {
+      setIsLoggedIn(true);
+      setUserRole(userRole);
+      console.log("kkkk",userRole)
+    }
+  }, []);
+
+   console.log("isLoggedIn:", isLoggedIn, "userRole:", userRole);
   return (
     <>
       <header>
@@ -31,13 +54,25 @@ const Header = () => {
             <li>
               <Link to="/marketplace">Place de marché</Link>
             </li>
-
           </ul>
-          <li>
-            <a href="SignIn" className="button-28">
+          {(isLoggedIn && (userRole === "user" || userRole === "teacher")) ? (
+            <>
+            <li><Link to="/profile"><i className='fa fa-user icon-header'></i></Link></li>
+              <li>
+                <button className="button-28" onClick={handleLogout}>
+                  Déconnexion
+                </button>
+                
+              </li>
+              
+            </>
+          ) :(
+            <li>
+              <a href="SignIn" className="button-28">
               Se connecter
             </a>
-          </li>
+            </li>
+          )}
         </nav>
       </header>
 

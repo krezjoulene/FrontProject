@@ -14,7 +14,25 @@
 .head .icon {
   margin-left: 10px;
 }
-
+ .icon-header {
+  width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #7C4A15;
+    transition: 0.5s;
+    position: relative; /* position relative par défaut */
+    left: 30px;/* déplacement vers le haut */
+    top: 20px;/* déplacement vers la droite */
+}
+.icon-header:hover{
+  color: #fff;
+  background-color: #7C4A15;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
 
 
 /* CSS */
@@ -46,6 +64,8 @@
   width: 90%;
   will-change: transform;
   height: 40px;
+  position: relative; /* position relative par défaut */
+
 }
 
 .button-28:disabled {
@@ -83,7 +103,7 @@ header li {
 header ul {
   padding-top: 30px;
   padding-bottom: 30px;
-  
+  margin-left: 90px;
 }
 header ul li a {
   color: #fff;
